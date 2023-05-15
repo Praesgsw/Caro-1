@@ -1,4 +1,4 @@
-﻿#include "Game.h"
+#include "Game.h"
 #include "Menu.h"
 #include "Board.h"
 #include <string.h>
@@ -97,7 +97,7 @@ void loadData(int i, int j, int k)
     //Nếu trạng thái ô là quân X, ghi quân X ra màn hình, đếm số quân X tăng lên 1.
     if (k == -1)
     {
-        Textcolor(Red); // X
+        Textcolor(Violet); // X
         gotoXY(4 * j + _b->_left + 2, 2 * i + _b->_top + 1);
         cout << "X";
         _b->CountX++;
@@ -105,7 +105,7 @@ void loadData(int i, int j, int k)
     //Nếu trạng thái ô là quân O, ghi quân O ra màn hình, đếm số quân O tăng lên 1.
     if (k == 1)
     {
-        Textcolor(Blue); // O
+        Textcolor(Green); // O
         gotoXY(4 * j + _b->_left + 2, 2 * i + _b->_top + 1);
         cout << "O";
         _b->CountY++;
@@ -1288,7 +1288,7 @@ void undo(int x, int y)
 {
     // Xóa quân cờ tại vị trí đã đánh
     deleteXO(x, y, ' ');
-   
+
 }
 void addMove(int x, int y) {
     g->moves.push_back({ x, y });
@@ -1303,7 +1303,7 @@ void undoLastMove() {
 
 int PlayerVsPlayer(Diem& a, int load, char data[30])
 {
- 
+
     showCur();
     setGame(SIZE, 0, 0);
     setCountXY(g);
@@ -1320,16 +1320,16 @@ int PlayerVsPlayer(Diem& a, int load, char data[30])
     }
     else
         startGame();
-    PrintScoreBoard();
+    PrintScoreBoard(1);
     Textcolor(244);
-    gotoXY(SIZE * 4 + 32, 32);
+    gotoXY(SIZE * 4 + 28, 3);
     cout << " PLAYER VS PLAYER ";
     Textcolor(Blue);
-    gotoXY(SIZE * 4 + 30 + 19, 6);
+    gotoXY(SIZE * 4 + 28, 15);
     //In điểm số 1.
     cout << a.score1;
     Textcolor(Red);
-    gotoXY(SIZE * 4 + 30 + 19, 19);
+    gotoXY(SIZE * 4 + 63, 15);
     //In điểm số 2
     cout << a.score2;
     gotoXY(2, 1);
@@ -1376,50 +1376,49 @@ int PlayerVsPlayer(Diem& a, int load, char data[30])
         if (input == 12) {
             playSound(2);
             undoLastMove();
-            
+
             gotoXY(g->_x, g->_y);
             changeTurn();
-            
+
         }
-        /*if (input == 13) {
+        if (input == 13) {
             settingPlaySound();
-        }*/
-        
+        }
         //Đọc phím Enter: thực hiện đánh quân X vào vị trí hiện tại của con trỏ trên bàn cờ.
         if (input == 6)
         {
             playSound(2);
-           
-            
+
+
             int x = getXatEnter();
             int y = getYatEnter();
-                if (processCheckBoard())
+            if (processCheckBoard())
+            {
+                switch (processFinish(x, y))
                 {
-                    switch (processFinish(x, y))
-                    {
-                    case -1:
-                    {
-                        playSound(4);
-                        a.score1++;
-                        PvPaskForRestart(a, load, data);
-                        break;
-                    }
-                    case 1:
-                    {
-                        playSound(4);
-                        a.score2++;
-                        PvPaskForRestart(a, load, data);
-                        break;
-                    }
-                    case 0:
-                    {
-                        playSound(4);
-                        PvPaskForRestart(a, load, data);
-                        break;
-                    }
-                    }
-                    addMove(x, y); // thêm nước cờ vào danh sách
+                case -1:
+                {
+                    playSound(4);
+                    a.score1++;
+                    PvPaskForRestart(a, load, data);
+                    break;
                 }
+                case 1:
+                {
+                    playSound(4);
+                    a.score2++;
+                    PvPaskForRestart(a, load, data);
+                    break;
+                }
+                case 0:
+                {
+                    playSound(4);
+                    PvPaskForRestart(a, load, data);
+                    break;
+                }
+                }
+                addMove(x, y); // thêm nước cờ vào danh sách
+            }
         }
         //Đọc phím Enter: thực hiện đánh quân X vào vị trí hiện tại của con trỏ trên bàn cờ.
         if (input == 6)
@@ -1464,7 +1463,7 @@ int PlayerVsPlayer(Diem& a, int load, char data[30])
         {
             playSound(2);
             gotoXY(50, 42); cout << "You should save game before you exit. Would you to exit game?";
-            string ask[] = { "BACK", "CONTINUE" };
+            string ask[] = { "ESC: BACK", "Y: CONTINUE" };
             int cur = 50;
             int input = -1;
             while (input != 6) {
@@ -1514,13 +1513,11 @@ int PlayerVsPlayer(Diem& a, int load, char data[30])
         }
     }
 }
-
 void PvPaskForRestart(Diem& a, int& load, char data[30])
 {
     int i = 8, j = 8;
-    string ask[] = { "Play Again", "BACK" };
+    string ask[] = { "Play Again", " BACK" };
     int selectedOption = 1;
-
     while (true)
     {
         // Hiển thị các tùy chọn và tô màu tùy chọn được chọn
@@ -1531,7 +1528,7 @@ void PvPaskForRestart(Diem& a, int& load, char data[30])
             else {
                 Textcolor(Blue);
             }
-            gotoXY(50, j + 18 + idx);
+            gotoXY(40, j + 18 + idx);
             cout << ask[idx];
         }
 
@@ -1560,7 +1557,7 @@ void PvPaskForRestart(Diem& a, int& load, char data[30])
 void PvCaskForRestart(Diem& a, int& load, char data[30])
 {
     int i = 8, j = 8;
-    string ask[] = { "Play Again", "BACK" };
+    string ask[] = { "Y : Play Again", "ESC: BACK" };
     int selectedOption = 1;
 
     while (true)
@@ -1628,93 +1625,6 @@ void enterCom(Diem& a, int load, char data[30]) {
         }
     }
 }
-void goiY() {
-    int x = getXatEnter();
-    int y = getYatEnter();
-    if (getCheckAtXY(x, y) != 1 && flagSymbol == true)
-    {
-        addMove(x, y); undoLastMove();
-    }
-
-    TimKiemNuocDi();
-    x = getXatEnter();
-    y = getYatEnter();
-    gotoXY(x, y);
-    Textcolor(Green);
-    gotoXY(x, y);
-    cout << "X";
-    input = getConsoleInput();
-    if (input == 6) {
-        gotoXY(x, y);
-        cout << "";
-    }
-}
-//void setting()
-//{
-//    char ch = ' ';
-//    int currentSelection = 0;
-//    int numItems = 4;
-//    string settingItems[] = { "Sound", "Suggest", "Load game", "Save Game" };
-//
-//    while (ch != 'x')
-//    {
-//        Textcolor(Red);
-//        gotoXY(x, y + currentSelection);
-//        cout << settingItems[currentSelection];
-//        Textcolor(15);
-//
-//        int input = 0;
-//        input = getConsoleInput();
-//
-//        Textcolor(Black);
-//        gotoXY(x, y + currentSelection);
-//        cout << settingItems[currentSelection];
-//
-//        if (input == 9)
-//        {
-//            // Handle Sound selection
-//            // ...
-//        }
-//        else if (input == 8)
-//        {
-//            // Handle Suggest selection
-//            // ...
-//        }
-//        else if (input == 5 || ch == 's')
-//        {
-//            // Move down one row
-//            currentSelection = (currentSelection + 1) % numItems;
-//        }
-//        else if (input == 2 || ch == 'w')
-//        {
-//            // Move up one row
-//            currentSelection = (currentSelection - 1 + numItems) % numItems;
-//        }
-//        else if (input == 6 || ch == '\r')
-//        {
-//            // Handle Enter key press
-//            switch (currentSelection)
-//            {
-//            case 0:
-//                // Handle Sound menu item selection
-//                // ...
-//                break;
-//            case 1:
-//                // Handle Suggest menu item selection
-//                // ...
-//                break;
-//            case 2:
-//                // Handle Load game menu item selection
-//                // ...
-//                break;
-//            case 3:
-//                // Handle Save Game menu item selection
-//                // ...
-//                break;
-//            }
-//        }
-//    }
-//}
 int PlayerVsCom(Diem& a, int load, char data[30])
 {
     int k = 1;
@@ -1734,22 +1644,22 @@ int PlayerVsCom(Diem& a, int load, char data[30])
         setTurn();
     }
     //In bảng điểm ra màn hình.
-    PrintScoreBoard();
+    PrintScoreBoard(1);
     Textcolor(244);
-    gotoXY(SIZE * 4 + 32, 32);
+    gotoXY(SIZE * 4 + 32, 3);
     cout << " PLAYER VS COMPUTER ";
     Textcolor(Blue);
-    gotoXY(SIZE * 4 + 30 + 19, 6);
+    gotoXY(SIZE * 4 + 28, 15);
     //In điểm số 1.
     cout << a.score1;
     Textcolor(Red);
-    gotoXY(SIZE * 4 + 30 + 19, 19);
+    gotoXY(SIZE * 4 + 63, 15);
     //In điểm số 2
     cout << a.score2;
     gotoXY(2, 1);
     while (isContinue())
     {
-       
+
         if (!getTurn())
         {
             //Đặt vị trí đánh đầu tiên cho người cho may
@@ -1772,7 +1682,7 @@ int PlayerVsCom(Diem& a, int load, char data[30])
             }
         }
         int input = getConsoleInput();
-        
+
         //Đọc phím A: dịch chuyển con trỏ trong bàn cờ sang trái 1 đơn vị.
 
         if (input == 3)
@@ -1804,22 +1714,17 @@ int PlayerVsCom(Diem& a, int load, char data[30])
             Load();
         }
         if (input == 12) {
-           
+
             playSound(2);
             undoLastMove();
             undoLastMove();
         }
         if (input == 13) {
-            goiY();
-
-        }
-        /*if (input == 13) {
             settingPlaySound();
-        }*/
+        }
         //Đọc phím Enter: thực hiện đánh quân X vào vị trí hiện tại của con trỏ trên bàn cờ.
         if (input == 6)
         {
-            flagSymbol = false;
             playSound(2);
             int x = getXatEnter();
             int y = getYatEnter();
@@ -1848,9 +1753,9 @@ int PlayerVsCom(Diem& a, int load, char data[30])
                     break;
                 }
                 }
-               addMove(x, y); // thêm nước cờ đã đi của x 
+                addMove(x, y); // thêm nước cờ đã đi của x 
             }
-           
+
         }
         if (input == 7)
         {
@@ -1860,7 +1765,7 @@ int PlayerVsCom(Diem& a, int load, char data[30])
         {
             playSound(2);
             gotoXY(50, 42); cout << "You should save game before you exit. Would you to exit game?";
-            string ask[] = { "BACK", "CONTINUE" };
+            string ask[] = { "ESC: BACK", "Y: CONTINUE" };
             int cur = 50;
             int input = -1;
             while (input != 6) {
@@ -1952,19 +1857,6 @@ void startGame()
     g->_x = getXAt(0, 0);
     g->_y = getYAt(0, 0);
     //Nếu là lượt của người chơi O.
-    if (g->_turn == 1)
-    {
-        Textcolor(Red);
-        gotoXY(SIZE * 4 + 32, 26);
-        cout << " Den luot PLAYER 1 ";
-    }
-    //Nếu là lượt của người chơi X.
-    else
-    {
-        Textcolor(Blue);
-        gotoXY(SIZE * 4 + 32, 26);
-        cout << " Den luot PLAYER 2 ";
-    }
     /* Textcolor(Blue);
      gotoXY(SIZE * 4 + 30 + 11, 4);
      cout << _b->CountX;
@@ -2045,13 +1937,14 @@ bool processCheckBoard()
         //In chữ X màu xanh dương ra màn hình.
         Textcolor(Blue);
         cout << "X";
-        gotoXY(SIZE * 4 + 32, 26);
+        gotoXY(SIZE * 4 + 28, 21);
         //Sau khi X đánh xong, hiện ra chữ đến lượt người chơi tiếp theo.
-        cout << " Den luot PLAYER 2 ";
-        gotoXY((SIZE * 4) + 30 + 12, 5);
+        PrintScoreBoard(2);
+        Textcolor(Red);
+        gotoXY((SIZE * 4) + 22, 14);
         cout << _b->CountX;
         Textcolor(Red);
-        gotoXY(SIZE * 4 + 30 + 12, 18);
+        gotoXY(SIZE * 4 + 57, 14);
         cout << _b->CountY;
         //gotoXY(g->_x, g->_y);
         break;
@@ -2060,15 +1953,13 @@ bool processCheckBoard()
         Textcolor(Red);
         //In chữ O màu đỏ ra màn hình
         cout << "O";
+        PrintScoreBoard(1);
         Textcolor(Blue);
-        gotoXY(SIZE * 4 + 32, 26);
-        //Sau khi O đánh xong, hiện ra chữ đến lượt người chơi tiếp theo.
-        cout << " Den luot PLAYER 1 ";
         Textcolor(Red);
-        gotoXY((SIZE * 4) + 30 + 12, 5);
+        gotoXY((SIZE * 4) + 22, 14);
         cout << _b->CountX;
         Textcolor(Red);
-        gotoXY(SIZE * 4 + 30 + 12, 18);
+        gotoXY(SIZE * 4 + 57, 14);
         cout << _b->CountY;
 
         break;
@@ -2095,16 +1986,19 @@ int processFinish(int x, int y)
         //Trường hợp người chơi X thắng, hiện ra màn hình P1 chiến thắng và lưu kết quả vào lịch sử.
     case -1:
         winDraw(1, '1', 10, 10);
+        //Box();
         LichSuGame(1);
         break;
         //Trường hợp người chơi O thắng, hiện ra màn hình P2 chiến thắng và lưu kết quả vào lịch sử.
     case 1:
         winDraw(2, '2', 10, 10);
+        //Box();
         LichSuGame(2);
         break;
         //Trường hợp 2 người chơi hòa nhau, hiện ra màn hình 2 người chơi hòa nhau và lưu kết quả vào lịch sử.
     case 0:
         winDraw(3, '1', 10, 10);
+        // Box();
         LichSuGame(0);
         break;
         //Trường hợp chưa có 2 chiến thắng, đổi lượt để người chơi tiếp theo đánh.
@@ -2223,7 +2117,6 @@ void printTurnSymbol()
         else
             cout << 'o';
         gotoXY(g->_x, g->_y);
-        flagSymbol = true;
     }
 }
 //Hàm Save game để có thể tiếp tục chơi tiếp mỗi khi thoát game.
@@ -2328,17 +2221,5 @@ void LoadGame(char data[30])
     Textcolor(Red);
     gotoXY(SIZE * 4 + 30 + 12, 18);
     cout << _b->CountY;
-    if (g->_turn == 1)
-    {
-        Textcolor(Blue);
-        gotoXY(SIZE * 4 + 32, 26);
-        cout << " Den luot PLAYER 1 ";
-    }
-    else
-    {
-        Textcolor(Red);
-        gotoXY(SIZE * 4 + 32, 26);
-        cout << " Den luot PLAYER 2 ";
-    }
 }
 
