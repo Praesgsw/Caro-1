@@ -1,9 +1,9 @@
-﻿#include "Board.h"
+#include "Board.h"
 void PrintScoreBoard(int k)
 {
     fstream file;
     string line;
-    int x = SIZE * 4 + 6, y = 4;
+    int x = SIZE*4+6, y = 4;
     file.open("1.txt", ios::in);
     if (k == 1)
     {
@@ -47,7 +47,7 @@ void PrintScoreBoard(int k)
                     Textcolor(Black);
                     cout << char(31);
                 }
-                else
+                else 
                 {
                     Textcolor(Black);
                     cout << line[j];
@@ -161,94 +161,6 @@ void PrintScoreBoard(int k)
             cout << char(223);
         }
     }
-    if (k == 3) {
-        while (!file.eof()) {
-            getline(file, line);
-            gotoXY(x, y);
-            for (int j = 0; j < line.length(); j++)
-            {
-                if (line[j] == '.')
-                {
-                    Textcolor(15);
-                    cout << char(219);
-                }
-                else if (line[j] == '1')
-                {
-                    Textcolor(FullBlue);
-                    cout << char(219);
-                }
-                else if (line[j] == '2')
-                {
-                    Textcolor(0);
-                    cout << char(219);
-                }
-                else if (line[j] == '4')
-                {
-                    Textcolor(Black);
-                    cout << char(30);
-                }
-                else if (line[j] == '5')
-                {
-                    Textcolor(Black);
-                    cout << char(17);
-                }
-                else if (line[j] == '6')
-                {
-                    Textcolor(Black);
-                    cout << char(16);
-                }
-                else if (line[j] == '7')
-                {
-                    Textcolor(Black);
-                    cout << char(31);
-                }
-                else
-                {
-                    Textcolor(Black);
-                    cout << line[j];
-                }
-            }
-            y += 1;
-        }
-        file.close();
-        // Bang 1
-        Textcolor(Grey);
-        for (int i = 10; i < 18; i++) {
-            gotoXY(SIZE * 4 + 5, i + 1);
-            cout << char(219);
-        }
-        for (int i = 10; i < 18; i++) {
-            gotoXY(SIZE * 4 + 35, i + 1);
-            cout << char(219);
-        }
-        gotoXY(SIZE * 4 + 5, 10);
-        for (int i = 0; i <= 30; i++) {
-            cout << char(220);
-        }
-        gotoXY(SIZE * 4 + 5, 18);
-        for (int i = 0; i < 31; i++) {
-            cout << char(223);
-        }
-        //Bang 2
-        Textcolor(Grey);
-        for (int i = 10; i < 18; i++) {
-            gotoXY(SIZE * 4 + 38, i + 1);
-            cout << char(219);
-        }
-        for (int i = 10; i < 18; i++) {
-            gotoXY(SIZE * 4 + 68, 1 + i);
-            cout << char(219);
-        }
-        gotoXY(SIZE * 4 + 38, 10);
-        for (int i = 0; i < 31; i++) {
-            cout << char(220);
-        }
-        gotoXY(SIZE * 4 + 38, 18);
-        for (int i = 0; i < 31; i++) {
-            cout << char(223);
-        }
-    }
-    
     Textcolor(Black);
     gotoXY(SIZE * 4 + 10, 12);
     cout << "PLAYER 1";
@@ -294,7 +206,7 @@ void PrintScoreBoard(int k)
     //gotoXY(SIZE * 4 + 30, 38);
     //cout << " ESC : Exit ";
 
-    gotoXY(2, 1);
+    //gotoXY(2, 1);
 } // IN BANG DIEM
 void Draw(int i, int x, int y) {
     fstream file;
@@ -360,7 +272,7 @@ void Draw(int i, int x, int y) {
                 Textcolor(Grey);
                 cout << char(179);
             }
-            else if (line[j] == '|' || line[j] == '-')
+            else if (line[j] == '|'|| line[j] == '-')
             {
                 Textcolor(0);
                 cout << char(179);
